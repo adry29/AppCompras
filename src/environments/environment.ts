@@ -4,7 +4,7 @@
 
 export const environment = {
   production: true,
-  firebaseConfig: {
+  firebase: {
     projectId: 'appcompras-89748',
     appId: '1:903429107528:web:589e9f7f94566eb3464d7d',
     storageBucket: 'appcompras-89748.appspot.com',
