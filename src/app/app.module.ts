@@ -28,6 +28,7 @@ import { RegistroComponent } from './autenticacion/registro/registro.component';
 import { AutenticacionService } from './servicios/autenticacion.service';
 import { InisesComponent } from './autenticacion/inises/inises.component';
 import { GuardService } from './servicios/guard.service';
+import { EditproveeComponent } from './proveedores/editprovee/editprovee.component';
 
 
 
@@ -38,6 +39,7 @@ const routes : Routes = [
   {path: 'editpres/:id', component: EditpresComponent, canActivate : [GuardService]},
   {path: 'presupuestos', component : PresupuestosComponent, canActivate : [GuardService]},
   {path: 'addprovee', component : AddproveeComponent, canActivate : [GuardService]},
+  {path : 'editprovee/:id', component : EditproveeComponent, canActivate: [GuardService]},
   {path: 'registro', component : RegistroComponent},
   {path: 'iniciosesion', component : InisesComponent},
   { path: '**', component: InicioComponent}
@@ -57,7 +59,8 @@ const routes : Routes = [
     PresupuestosComponent,
     EditpresComponent,
     RegistroComponent,
-    InisesComponent
+    InisesComponent,
+    EditproveeComponent
   ],
   imports: [
     BrowserModule,

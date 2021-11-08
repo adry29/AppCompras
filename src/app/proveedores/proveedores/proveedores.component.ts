@@ -7,16 +7,44 @@ import { ProveedoresService } from 'src/app/servicios/proveedores.service';
   styleUrls: ['./proveedores.component.css']
 })
 export class ProveedoresComponent implements OnInit {
-
-  mensaje : string;
-  proveedores : any;
-
+  mensaje?: string;
+  proveedores: any[] = [];
+  public cargado: boolean = false;
   constructor(private proveedoresService: ProveedoresService) {
-    this.mensaje = "que no salga esto por dio";
-   }
 
-  ngOnInit(): void {
-    this.proveedores = this.proveedoresService.getProveedores();
   }
-
+  ngOnInit(): void {
+    this.cargado = false;
+    try {
+      this.proveedoresService.getProveedores()
+        .subscribe(proveedores => {
+          for (const id$ in proveedores) {
+            const p = proveedores[id$];
+            p.id$ = id$;
+            this.proveedores.push(proveedores[id$]);
+          }
+          this.cargado=true;
+          })
+        }catch(error){
+          console.log(error);
+          this.cargado=true;
+        }
 }
+   
+    
+  
+eliminarProveedor(id$) {
+  this.proveedoresService.delProveedor(id$)
+    .subscribe(res => {
+      this.proveedores = [];
+      this.proveedoresService.getProveedores()
+        .subscribe(proveedores => {
+          for (const id$ in proveedores) {
+            const p = proveedores[id$];
+            p.id$ = id$;
+            this.proveedores.push(proveedores[id$]);
+          }
+        })
+    });
+}
+  }

@@ -1,21 +1,24 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { ProveedoresService } from 'src/app/servicios/proveedores.service';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from
-  '@angular/forms';
+'@angular/forms';
 
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 
 @Component({
-  selector: 'app-addprovee',
-  templateUrl: './addprovee.component.html',
-  styleUrls: ['./addprovee.component.css']
+  selector: 'app-editprovee',
+  templateUrl: './editprovee.component.html',
+  styleUrls: ['./editprovee.component.css']
 })
-export class AddproveeComponent implements OnInit {
+export class EditproveeComponent implements OnInit {
   proveedorForm!: FormGroup;
-  @ViewChild('formpro') formpro!: NgForm;
   proveedor: any;
-  provincias: string[] = [
+  nombre:any;
+  cif:any;
+  direccion:any;
+  cp:any;
+  localidad:any;
+  provincias: any[] = [
     'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona',
     'Burgos', 'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba',
     'La Coruña', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara',
@@ -23,12 +26,26 @@ export class AddproveeComponent implements OnInit {
     'Madrid', 'Málaga', 'Murcia', 'Navarra', 'Orense', 'Palencia', 'Las Palmas',
     'Pontevedra', 'La Rioja', 'Salamanca', 'Segovia', 'Sevilla', 'Soria', 'Tarragona',
     'Santa Cruz de Tenerife', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vizcaya',
-    'Zamora', 'Zaragoza']
+    'Zamora', 'Zaragoza'];
+    email:any;
+    telefono:any = 0;
+    contacto:any;
+    id!:string;
+    constructor(private pf: FormBuilder,
+      private proveedorService: ProveedoresService,
+      private router: Router,
+      private activatedRouter: ActivatedRoute) {
+      this.activatedRouter.params.subscribe(parametros => {
+        this.id = parametros['id'];
+        this.proveedorService.getProveedor(this.id)
+          .subscribe(proveedor => this.proveedor = proveedor)
+      });
+    }
 
-  constructor(private pf: FormBuilder,
-    private proveedoresService: ProveedoresService) {
-  }
-  ngOnInit(): void {
+  
+  
+
+  ngOnInit() {
     this.proveedorForm = this.pf.group({
       nombre: ['', Validators.required],
       cif: ['', Validators.required],
@@ -40,15 +57,17 @@ export class AddproveeComponent implements OnInit {
       email: ['', Validators.required],
       contacto: ['', Validators.required]
     })
+    
   }
+  
+  
   onSubmit() {
     this.proveedor = this.saveProveedor();
-    this.proveedoresService.postProveedor(this.proveedor)
-      .subscribe(newpres => {
+    this.proveedorService.putProveedor(this.proveedor, this.id)
+      .subscribe(newpre => {
+        this.router.navigate(['/proveedores'])
       })
-    this.proveedorForm.reset();
   }
-
   saveProveedor() {
     const saveProveedor = {
       nombre: this.proveedorForm.get('nombre')?.value,
@@ -63,6 +82,4 @@ export class AddproveeComponent implements OnInit {
     };
     return saveProveedor;
   }
-
-
 }
