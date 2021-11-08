@@ -37,7 +37,7 @@ export class AddproveeComponent implements OnInit {
       localidad: ['', Validators.required],
       provincia: ['', Validators.required],
       telefono: [null, Validators.required],
-      email: ['', Validators.required],
+      email: ['',  Validators.required],
       contacto: ['', Validators.required]
     })
   }
